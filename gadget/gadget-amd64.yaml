@@ -66,19 +66,18 @@ volumes:
         type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
         size: 1G
 
-# Optional first-boot auto-connect (fleet convenience). Disabled until the
-# axos-pc gadget snap-id is known: it is assigned on first store upload, so
-# upload once with this block commented, read the snap-id (snap info axos-pc
-# or the upload output), substitute it below, then re-upload to enable.
-# On a single device you can instead connect manually after the remodel:
+# Optional first-boot auto-connect (fleet convenience). Both snap-ids are now
+# known, so uncommenting this block and re-uploading the gadget enables
+# auto-connect on new devices. On a single already-flashed device, connect
+# manually after the remodel instead:
 #   sudo snap connect axos-restaurant:serial-port axos-pc:barcode-acm0
 #   sudo snap connect axos-restaurant:serial-port axos-pc:barcode-acm1
 #   sudo snap connect axos-restaurant:serial-port axos-pc:relay-48v
 #
 # connections:
 #   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
-#     slot: GADGET_SNAP_ID:barcode-acm0
+#     slot: mtL5SiMQ5vUvtn5AJDsvUaT5zHrcwSVW:barcode-acm0
 #   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
-#     slot: GADGET_SNAP_ID:barcode-acm1
+#     slot: mtL5SiMQ5vUvtn5AJDsvUaT5zHrcwSVW:barcode-acm1
 #   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
-#     slot: GADGET_SNAP_ID:relay-48v
+#     slot: mtL5SiMQ5vUvtn5AJDsvUaT5zHrcwSVW:relay-48v
