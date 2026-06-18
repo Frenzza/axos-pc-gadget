@@ -66,13 +66,19 @@ volumes:
         type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
         size: 1G
 
-# Auto-connect the axos-restaurant serial-port plug to the gadget slots at
-# first boot. axos-restaurant snap-id is set; GADGET_SNAP_ID is the snap-id
-# of this axos-pc gadget (run `snapcraft register axos-pc` to obtain it).
-connections:
-  - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
-    slot: GADGET_SNAP_ID:barcode-acm0
-  - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
-    slot: GADGET_SNAP_ID:barcode-acm1
-  - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
-    slot: GADGET_SNAP_ID:relay-48v
+# Optional first-boot auto-connect (fleet convenience). Disabled until the
+# axos-pc gadget snap-id is known: it is assigned on first store upload, so
+# upload once with this block commented, read the snap-id (snap info axos-pc
+# or the upload output), substitute it below, then re-upload to enable.
+# On a single device you can instead connect manually after the remodel:
+#   sudo snap connect axos-restaurant:serial-port axos-pc:barcode-acm0
+#   sudo snap connect axos-restaurant:serial-port axos-pc:barcode-acm1
+#   sudo snap connect axos-restaurant:serial-port axos-pc:relay-48v
+#
+# connections:
+#   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
+#     slot: GADGET_SNAP_ID:barcode-acm0
+#   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
+#     slot: GADGET_SNAP_ID:barcode-acm1
+#   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
+#     slot: GADGET_SNAP_ID:relay-48v
