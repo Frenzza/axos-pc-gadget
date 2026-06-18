@@ -67,13 +67,12 @@ volumes:
         size: 1G
 
 # Auto-connect the axos-restaurant serial-port plug to the gadget slots at
-# first boot. Replace the placeholders with the brand-store snap-ids:
-#   AXOS_RESTAURANT_SNAP_ID = snap-id of axos-restaurant
-#   GADGET_SNAP_ID          = snap-id of this axos-pc gadget
+# first boot. axos-restaurant snap-id is set; GADGET_SNAP_ID is the snap-id
+# of this axos-pc gadget (run `snapcraft register axos-pc` to obtain it).
 connections:
-  - plug: AXOS_RESTAURANT_SNAP_ID:serial-port
+  - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
     slot: GADGET_SNAP_ID:barcode-acm0
-  - plug: AXOS_RESTAURANT_SNAP_ID:serial-port
+  - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
     slot: GADGET_SNAP_ID:barcode-acm1
-  - plug: AXOS_RESTAURANT_SNAP_ID:serial-port
+  - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
     slot: GADGET_SNAP_ID:relay-48v
