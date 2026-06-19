@@ -66,6 +66,17 @@ volumes:
         type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
         size: 1G
 
+# CPU isolation for the EtherCAT RT thread (SCHED_FIFO/prio 80 pinned to core 3,
+# see ethercat-core rt_thread.rs + config cpu_affinity=3). isolcpus removes core
+# 3 from the scheduler's load balancing; nohz_full/rcu_nocbs reduce ticks and
+# offload RCU callbacks on it. Required on signed Core where the kernel cmdline
+# cannot be set at runtime (dangerous-cmdline-append is rejected).
+kernel-cmdline:
+  append:
+    - isolcpus=3
+    - nohz_full=3
+    - rcu_nocbs=3
+
 # Optional first-boot auto-connect (fleet convenience). Both snap-ids are now
 # known, so uncommenting this block and re-uploading the gadget enables
 # auto-connect on new devices. On a single already-flashed device, connect
