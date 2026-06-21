@@ -1,5 +1,5 @@
 name: axos-pc
-version: '24-0.2-axos2'
+version: '24-0.4-axos2'
 type: gadget
 base: core24
 summary: PC gadget for Axos restaurant devices
