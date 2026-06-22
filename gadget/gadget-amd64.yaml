@@ -65,3 +65,46 @@ volumes:
         filesystem: ext4
         type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
         size: 1G
+
+# CPU isolation for the EtherCAT RT thread (SCHED_FIFO/prio 80 pinned to core 3,
+# see ethercat-core rt_thread.rs + config cpu_affinity=3). isolcpus removes core
+# 3 from the scheduler's load balancing; nohz_full/rcu_nocbs reduce ticks and
+# offload RCU callbacks on it. Required on signed Core where the kernel cmdline
+# cannot be set at runtime (dangerous-cmdline-append is rejected).
+#
+# IRQ steering off core 3: bare isolcpus does NOT keep interrupts off the isolated
+# core. The EtherCAT NIC (enp1s0) was observed firing a TxRx queue IRQ on core 3,
+# and nvme0q4 too. `irqaffinity=0-2,4-7` keeps NON-managed IRQs (e.g. the NIC) off
+# core 3; the `managed_irq` flag on isolcpus additionally steers kernel-MANAGED
+# IRQs (e.g. NVMe queues, which are read-only at runtime) away from it. `domain`
+# preserves the prior scheduler-isolation behaviour.
+#
+# C-state cap: during the inter-cycle clock_nanosleep the isolated core entered a
+# deep C-state and paid the exit latency on wakeup — measured ~60µs avg / ~115µs
+# max RT-loop jitter, collapsing to ~7µs / ~14µs once deep C-states were blocked.
+# Capping the idle states to C1 (low exit latency) keeps wakeup deterministic.
+# Trade-off: higher idle power on ALL cores (acceptable for a 24/7 appliance).
+kernel-cmdline:
+  append:
+    - isolcpus=managed_irq,domain,3
+    - nohz_full=3
+    - rcu_nocbs=3
+    - irqaffinity=0-2,4-7
+    - intel_idle.max_cstate=1
+    - processor.max_cstate=1
+
+# Optional first-boot auto-connect (fleet convenience). Both snap-ids are now
+# known, so uncommenting this block and re-uploading the gadget enables
+# auto-connect on new devices. On a single already-flashed device, connect
+# manually after the remodel instead:
+#   sudo snap connect axos-restaurant:serial-port axos-pc:barcode-acm0
+#   sudo snap connect axos-restaurant:serial-port axos-pc:barcode-acm1
+#   sudo snap connect axos-restaurant:serial-port axos-pc:relay-48v
+#
+# connections:
+#   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
+#     slot: mtL5SiMQ5vUvtn5AJDsvUaT5zHrcwSVW:barcode-acm0
+#   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
+#     slot: mtL5SiMQ5vUvtn5AJDsvUaT5zHrcwSVW:barcode-acm1
+#   - plug: t9EBv910LlMvCDyn2C3bGWlNEssx1W9P:serial-port
+#     slot: mtL5SiMQ5vUvtn5AJDsvUaT5zHrcwSVW:relay-48v

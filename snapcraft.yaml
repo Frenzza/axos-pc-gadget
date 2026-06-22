@@ -1,13 +1,29 @@
-name: pc
-version: '24-0.2'
+name: axos-pc
+version: '24-0.4-axos2'
 type: gadget
 base: core24
-summary: PC gadget for generic devices
+summary: PC gadget for Axos restaurant devices
 description: |
-    This gadget enables generic pc devices to work with Ubuntu Core
+    Fork of the Canonical pc gadget adding serial-port slots for the
+    axos-restaurant daemon (USB-serial barcode readers + 48V USB relay).
 confinement: strict
 grade: stable
 icon: icon.png
+
+# serial-port slots for the axos-restaurant daemon. Two identical SM-2D
+# barcode readers (same VID:PID + serial, hotplug cannot distinguish them)
+# plus the CH340 USB relay gating 48V power. Auto-connected via the
+# `connections:` section in gadget/gadget-amd64.yaml.
+slots:
+  barcode-acm0:
+    interface: serial-port
+    path: /dev/ttyACM0
+  barcode-acm1:
+    interface: serial-port
+    path: /dev/ttyACM1
+  relay-48v:
+    interface: serial-port
+    path: /dev/ttyUSB0
 
 #package-repositories:
 # - type: apt
