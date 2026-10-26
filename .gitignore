@@ -2,3 +2,7 @@ parts/
 prime/
 stage/
 pc_*.snap
+axos-pc_*.snap
+# copied from gadget/gadget-<arch>.yaml at build time
+/gadget.yaml
+.craft/
