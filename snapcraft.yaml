@@ -1,29 +1,14 @@
 name: axos-pc
-version: '26-0.1-axos1'
+version: '26-0.2-axos1'
 type: gadget
 base: core26
 summary: PC gadget for Axos restaurant devices
 description: |
-    Fork of the Canonical pc gadget adding serial-port slots for the
-    axos-restaurant daemon (USB-serial barcode readers + 48V USB relay).
+    Fork of the Canonical pc gadget with RT kernel cmdline tuning
+    (EtherCAT core 3 isolation) for Axos restaurant devices.
 confinement: strict
 grade: stable
 icon: icon.png
-
-# serial-port slots for the axos-restaurant daemon. Two identical SM-2D
-# barcode readers (same VID:PID + serial, hotplug cannot distinguish them)
-# plus the CH340 USB relay gating 48V power. Auto-connected via the
-# `connections:` section in gadget/gadget-amd64.yaml.
-slots:
-  barcode-acm0:
-    interface: serial-port
-    path: /dev/ttyACM0
-  barcode-acm1:
-    interface: serial-port
-    path: /dev/ttyACM1
-  relay-48v:
-    interface: serial-port
-    path: /dev/ttyUSB0
 
 hooks:
   prepare-device:
